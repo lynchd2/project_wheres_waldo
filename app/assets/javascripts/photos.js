@@ -10,6 +10,7 @@ APP.waldo = (function($){
   var characters = ["Waldo", "Woof", "Wizard"];
 
   stub.init = function(){
+    stub.getTags();
     stub.clickWaldo();
     stub.clickChoice();
     stub.clickX();
@@ -66,7 +67,7 @@ APP.waldo = (function($){
       });
   };
 
-  var getTags = function() {
+  stub.getTags = function() {
     var photo_id = Number(window.location.pathname.split("/").slice(-1));
     $.ajax({
       url: "/tags",
@@ -81,7 +82,12 @@ APP.waldo = (function($){
   };
 
   var populateTags = function(data) {
-
+    console.log(data.x);
+    console.log(data);
+    var tag = addBox(data.x, data.y);
+    console.log(tag);
+    //dropDown(data.x, data.y, tag);
+    removeChar(data.character);
   };
 
   stub.clickX = function() {
@@ -104,11 +110,13 @@ APP.waldo = (function($){
   };
 
   var addBox = function(x, y){
+
     // need to take care of edge cases (like on the edges)
     var $tag = $('<div>').addClass('finder').css("top", y + 60).css("left", x - 10).attr("data-tag", "0");
     var $x = $('<a href="#">').addClass("x-link").text("X")
     $tag.append($x);
-    $('#waldo-container').after($tag);
+
+    console.log($('#waldo-container').after($tag));
     return $tag;
   };
 
