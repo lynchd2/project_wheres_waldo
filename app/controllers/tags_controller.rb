@@ -1,5 +1,14 @@
 class TagsController < ApplicationController
 
+  def index
+    @tags = Tag.find_by_photo_id(params[:pid].to_i)
+    # @tags = Tag.all
+    respond_to do |format|
+      format.html {}
+      format.json { render json: @tags }
+    end
+  end
+
   def create
     @tag = Tag.new(tag_params)
     if @tag.save

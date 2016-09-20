@@ -66,6 +66,23 @@ APP.waldo = (function($){
       });
   };
 
+  var getTags = function() {
+    var photo_id = Number(window.location.pathname.split("/").slice(-1));
+    $.ajax({
+      url: "/tags",
+      method: "GET",
+      data: "pid=" + photo_id,
+      contentType: "application/json",
+      dataType: "json",
+      success: function(data) {
+        populateTags(data);
+      }
+    });
+  };
+
+  var populateTags = function(data) {
+
+  };
 
   stub.clickX = function() {
     $("body").on("click", "a", function(e) {
