@@ -37,15 +37,16 @@ APP.waldo = (function($){
 
 
   //Maybe refactor so parent() is not constantly being used
-  //Try to find out parent of choice 
+  //Try to find out parent of choice
   stub.clickChoice = function() {
     $("body").on("click", ".choice", function(e) {
       var $target = $(e.target).removeClass('choice');
-      var finderDiv = $target.parent().parent()
+      var finderDiv = $target.parent().parent();
       var x = parseInt(finderDiv.css("top"));
       var y = parseInt(finderDiv.css("left"));
       var character = $target.data("id");
-      ajaxRequest({x: x , y: y ,character: character}, $target, finderDiv)
+      var photo_id = Number(window.location.pathname.split("/").slice(-1));
+      ajaxRequest({x: x , y: y ,character: character, photo_id: photo_id}, $target, finderDiv);
     });
   };
 
@@ -53,7 +54,7 @@ APP.waldo = (function($){
     $.ajax({
         url: "/tags",
         method: "POST",
-        data: tag,
+        data: JSON.stringify({ tag: tag }),
         contentType: "application/json",
         dataType: "json",
         success: function() {
@@ -62,8 +63,8 @@ APP.waldo = (function($){
           var $dropDown = $target.parent().removeClass('drop-down').addClass('absolute');
           $(".choice").remove();
         }
-      })
-  }
+      });
+  };
 
 
   stub.clickX = function() {
