@@ -13,3 +13,13 @@
  *= require_tree .
  *= require_self
  */
+
+#waldo-resize {
+  height: auto;
+  width: 100%;
+}
+
+#waldo-container {
+  height: auto;
+  width: 100%;
+}
