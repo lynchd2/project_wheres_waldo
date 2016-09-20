@@ -10,10 +10,10 @@ APP.waldo = (function($){
   var characters = ["Waldo", "Woof", "Wizard"];
 
   stub.init = function(){
-    stub.getTags();
     stub.clickWaldo();
     stub.clickChoice();
     stub.clickX();
+    stub.getTags();
     $('.drop-down').hide();
   };
 
@@ -84,16 +84,25 @@ APP.waldo = (function($){
   var populateTags = function(data) {
     for(var i = 0; i < data.length; i++) {
       var tag = addBox(data[i].y + 10, data[i].x - 60);
-      dropDown(data[i].x, data[i].y, tag[i]);
-      removeChar(data[i].character);
+      tag.attr('data-tag', "1");
+      populateCharacter(data[i].character, tag);
     }
 
+  };
+
+  var populateCharacter = function(person, tag){
+    var x = $('<div>').attr("data-id", person).text(person);
+    var drop = $('<div class="absolute">').append(x);
+    tag.append(drop);
+    removeChar(person);
   };
 
   stub.clickX = function() {
     $("body").on("click", "a", function(e) {
       e.preventDefault();
       $target = $(e.target);
+      // console.log(characters);
+      // console.log($target.siblings().last());
       if ($target.parent().data('tag')) {
         var char = $target.siblings().last().text();
         characters.push(char);
@@ -112,7 +121,7 @@ APP.waldo = (function($){
   var addBox = function(x, y){
     // need to take care of edge cases (like on the edges)
     var $tag = $('<div>').addClass('finder').css("top", y + 60).css("left", x - 10).attr("data-tag", "0");
-    var $x = $('<a href="#">').addClass("x-link").text("X")
+    var $x = $('<a href="#">').addClass("x-link").text("X");
     $tag.append($x);
     $('#waldo-container').after($tag);
     return $tag;
