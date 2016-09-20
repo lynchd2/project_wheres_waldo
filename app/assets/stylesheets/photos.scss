@@ -7,5 +7,11 @@
   border: 3px solid cyan;
   height: 30px;
   width: 30px;
-  border-radius: 50%;
+}
+
+.drop-down {
+  position: absolute;
+  .choice {
+    background-color: white;
+  }
 }
