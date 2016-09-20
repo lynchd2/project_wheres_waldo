@@ -3,11 +3,18 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .finder {
+/*  visibility: hidden;*/
   position: absolute;
   border: 3px solid cyan;
   height: 30px;
   width: 30px;
 }
+
+/*#waldo-container:hover {
+  .finder {
+    visibility: visible;
+  }
+}*/
 
 .drop-down {
   position: absolute;

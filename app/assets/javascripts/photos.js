@@ -12,19 +12,21 @@ APP.waldo = (function($){
   stub.init = function(){
     stub.clickWaldo();
     stub.clickChoice();
+    stub.clickX();
     $('.drop-down').hide();
   };
 
   stub.clickWaldo = function(){
     $("#waldo-container").on("click", function(e){
       if (characters.length > 0) {
+        $('[data-tag="0"]').remove();
         var posX = $(this).position().left;
         posX = Math.floor((e.pageX - posX));
         var posY = $(this).position().top;
         posY = Math.floor((e.pageY - posY));
         // console.log((posX) + ' , ' + Math.floor(posY));
-        addBox(posX, posY);
-        dropDown(posX, posY);
+        var tag = addBox(posX, posY);
+        dropDown(posX, posY, tag);
       } else {
         submitGuess();
       }
@@ -36,9 +38,22 @@ APP.waldo = (function($){
   stub.clickChoice = function() {
     $("body").on("click", ".choice", function(e) {
       var $target = $(e.target).removeClass('choice');
+      $target.parent().parent().attr('data-tag', '1');
       removeChar($target.data('id'));
       var $dropDown = $target.parent().removeClass('drop-down').addClass('absolute');
       $(".choice").remove();
+    });
+  };
+
+  stub.clickX = function() {
+    $("body").on("click", "a", function(e) {
+      e.preventDefault();
+      $target = $(e.target);
+      if ($target.parent().data('tag')) {
+        var char = $target.siblings().last().text();
+        characters.push(char);
+      }
+      $target.parent().remove();
     });
   };
 
@@ -51,23 +66,25 @@ APP.waldo = (function($){
 
   var addBox = function(x, y){
     // need to take care of edge cases (like on the edges)
-    var $tag = $('<div>').addClass('finder').css("top", y + 60).css("left", x - 10);
-    
-    $('#waldo-container').append($tag);
+    var $tag = $('<div>').addClass('finder').css("top", y + 60).css("left", x - 10).attr("data-tag", "0");
+    var $x = $('<a href="#">').text("X").css("top", -20).css("right", -32).css("position", "relative").css("background-color", "white");
+    $tag.append($x);
+    $('#waldo-container').after($tag);
+    return $tag;
   };
 
-  var dropDown = function(x, y) {
-    createDropDown();
-    $('.drop-down').css("top", y + 95).css("left", x - 10);
+  var dropDown = function(x, y, tag) {
+    createDropDown(tag);
+    // $('.drop-down').css("top", y + 95).css("left", x - 10);
     $('.drop-down').slideDown();
   };
 
-  var createDropDown = function() {
+  var createDropDown = function(tag) {
     var $dropDown = $('<div>').addClass("drop-down");
     for (var i = 0; i < characters.length; i++) {
       addCharacters($dropDown, i);
     }
-    $("#waldo-container").after($dropDown);
+    tag.append($dropDown);
   };
 
   var addCharacters = function(dropDown, index) {
