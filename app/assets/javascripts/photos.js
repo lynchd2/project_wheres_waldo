@@ -28,21 +28,31 @@ APP.waldo = (function($){
   };
 
   stub.clickChoice = function() {
-    $(".choice").click(function(e) {
+    $("body").on("click", ".choice", function(e) {
       var posX = $(this).position().left;
       posX = Math.floor((e.pageX - posX));
       var posY = $(this).position().top;
       posY = Math.floor((e.pageY - posY));
-      $(e.target).css("top", posY).css("left", posX);
-      $("#waldo-container").append($(e.target));
-      $('.drop-down').slideUp();
+      console.log("Click Choice")
+      console.log(e.target)
+      console.log(posX)
+      console.log(posY)
+
+      //$(e.target).css("top", posY).css("left", posX).css("position", "absolute");
+      var $dropDown = $(e.target).parent();
+      $dropDown.remove(".choice");
+      //$('.drop-down').slideUp();
+      $dropDown.html($(e.target));
+      
     });
   };
 
   var addBox = function(x, y){
+    console.log("Box cords")
+      console.log(x)
+      console.log(y)
     // need to take care of edge cases (like on the edges)
     var $tag = $('<div>').addClass('finder').css("top", y + 60).css("left", x - 10);
-    console.log($tag);
     $('#waldo-container').append($tag);
   };
 
@@ -55,10 +65,17 @@ APP.waldo = (function($){
   var createDropDown = function() {
     var $dropDown = $('<div>').addClass("drop-down")
     for (var i = 0; i < characters.length; i++) {
-      $dropDown.append('<div>').addClass("choice").text(characters[i]).attr("data-id", characters[i]);
+      addCharacters($dropDown, i)
     }
     $("#waldo-container").after($dropDown);
   }
+
+  var addCharacters = function(dropDown, index) {
+    var x = $('<div>').addClass("choice").text(characters[index]).attr("data-id", characters[index]);
+    dropDown.append(x)
+   
+  }
+
 
   return stub;
 })($);
