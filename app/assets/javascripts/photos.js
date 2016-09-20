@@ -35,15 +35,36 @@ APP.waldo = (function($){
 
   var submitGuess = function() {};
 
+
+  //Maybe refactor so parent() is not constantly being used
+  //Try to find out parent of choice 
   stub.clickChoice = function() {
     $("body").on("click", ".choice", function(e) {
       var $target = $(e.target).removeClass('choice');
-      $target.parent().parent().attr('data-tag', '1');
-      removeChar($target.data('id'));
-      var $dropDown = $target.parent().removeClass('drop-down').addClass('absolute');
-      $(".choice").remove();
+      var finderDiv = $target.parent().parent()
+      var x = parseInt(finderDiv.css("top"));
+      var y = parseInt(finderDiv.css("left"));
+      var character = $target.data("id");
+      ajaxRequest({x: x , y: y ,character: character}, $target, finderDiv)
     });
   };
+
+  var ajaxRequest = function(tag, $target, finderDiv) {
+    $.ajax({
+        url: "/tags",
+        method: "POST",
+        data: tag,
+        contentType: "application/json",
+        dataType: "json",
+        success: function() {
+          finderDiv.attr('data-tag', '1');
+          removeChar($target.data('id'));
+          var $dropDown = $target.parent().removeClass('drop-down').addClass('absolute');
+          $(".choice").remove();
+        }
+      })
+  }
+
 
   stub.clickX = function() {
     $("body").on("click", "a", function(e) {
@@ -67,7 +88,7 @@ APP.waldo = (function($){
   var addBox = function(x, y){
     // need to take care of edge cases (like on the edges)
     var $tag = $('<div>').addClass('finder').css("top", y + 60).css("left", x - 10).attr("data-tag", "0");
-    var $x = $('<a href="#">').text("X").css("top", -20).css("right", -32).css("position", "relative").css("background-color", "white");
+    var $x = $('<a href="#">').addClass("x-link").text("X")
     $tag.append($x);
     $('#waldo-container').after($tag);
     return $tag;
