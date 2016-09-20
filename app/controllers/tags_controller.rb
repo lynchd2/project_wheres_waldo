@@ -1,7 +1,7 @@
 class TagsController < ApplicationController
 
   def index
-    @tags = Tag.find_by_photo_id(params[:pid].to_i)
+    @tags = Tag.where(photo_id: params[:pid].to_i)
     # @tags = Tag.all
     respond_to do |format|
       format.html {}

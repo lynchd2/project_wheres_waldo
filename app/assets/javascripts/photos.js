@@ -82,12 +82,12 @@ APP.waldo = (function($){
   };
 
   var populateTags = function(data) {
-    console.log(data.x);
-    console.log(data);
-    var tag = addBox(data.x, data.y);
-    console.log(tag);
-    //dropDown(data.x, data.y, tag);
-    removeChar(data.character);
+    for(var i = 0; i < data.length; i++) {
+      var tag = addBox(data[i].y + 10, data[i].x - 60);
+      dropDown(data[i].x, data[i].y, tag[i]);
+      removeChar(data[i].character);
+    }
+
   };
 
   stub.clickX = function() {
@@ -110,13 +110,11 @@ APP.waldo = (function($){
   };
 
   var addBox = function(x, y){
-
     // need to take care of edge cases (like on the edges)
     var $tag = $('<div>').addClass('finder').css("top", y + 60).css("left", x - 10).attr("data-tag", "0");
     var $x = $('<a href="#">').addClass("x-link").text("X")
     $tag.append($x);
-
-    console.log($('#waldo-container').after($tag));
+    $('#waldo-container').after($tag);
     return $tag;
   };
 
