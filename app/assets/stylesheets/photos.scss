@@ -2,3 +2,10 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.finder {
+  position: absolute;
+  border: 3px solid cyan;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+}
