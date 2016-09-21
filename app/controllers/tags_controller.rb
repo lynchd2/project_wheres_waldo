@@ -26,6 +26,16 @@ class TagsController < ApplicationController
 
 
   def destroy
+    @tag = Tag.find(params[:id])
+    if @tag.destroy
+      respond_to do |format|
+        format.json {}
+      end
+    else
+      respond_to do |format|
+        format.json {}
+      end
+    end
 
   end
 

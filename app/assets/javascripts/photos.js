@@ -85,6 +85,7 @@ APP.waldo = (function($){
     for(var i = 0; i < data.length; i++) {
       var tag = addBox(data[i].y + 10, data[i].x - 60);
       tag.attr('data-tag', "1");
+      tag.attr('data-id', data[i].id)
       populateCharacter(data[i].character, tag);
     }
 
@@ -101,15 +102,23 @@ APP.waldo = (function($){
     $("body").on("click", "a", function(e) {
       e.preventDefault();
       $target = $(e.target);
-      // console.log(characters);
-      // console.log($target.siblings().last());
       if ($target.parent().data('tag')) {
         var char = $target.siblings().last().text();
         characters.push(char);
       }
       $target.parent().remove();
+      ajaxDelete($target.siblings().text(), $target.parent().data("id"));
     });
   };
+
+  var ajaxDelete = function(name, id) {
+    var pid = Number(window.location.pathname.split("/").slice(-1));
+    $.ajax({
+      url: '/tags/' + id,
+      data: {'pid': pid, "name": name},
+      type: 'DELETE',
+    });
+  }
 
   var removeChar = function(charName){
     var index = characters.indexOf(charName);
